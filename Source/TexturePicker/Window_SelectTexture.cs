@@ -8,7 +8,7 @@ using UnityEngine;
 using Verse;
 using Verse.Sound;
 
-namespace TexturePicker;
+namespace ChooseYourTextures;
 
 public class Window_SelectTexture : Window
 {

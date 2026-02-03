@@ -7,7 +7,7 @@ using Verse;
 using RimWorld;
 using UnityEngine;
 
-namespace TexturePicker;
+namespace ChooseYourTextures;
 
 public class TP_Mod : Mod
 {
@@ -18,7 +18,7 @@ public class TP_Mod : Mod
         Settings = GetSettings<TP_Settings>();
     }
 
-    public override string SettingsCategory() => "Texture Picker";
+    public override string SettingsCategory() => "Choose Your Textures";
 
     public override void DoSettingsWindowContents(Rect inRect)
     {

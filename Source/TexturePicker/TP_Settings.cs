@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Verse;
 using RimWorld;
 
-namespace TexturePicker;
+namespace ChooseYourTextures;
 
 public class TP_Settings : ModSettings
 {

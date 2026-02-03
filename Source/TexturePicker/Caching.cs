@@ -7,7 +7,7 @@ using Verse;
 using RimWorld;
 using UnityEngine;
 
-namespace TexturePicker;
+namespace ChooseYourTextures;
 
 [StaticConstructorOnStartup]
 public static class Caching

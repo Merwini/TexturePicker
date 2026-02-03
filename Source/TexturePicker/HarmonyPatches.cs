@@ -8,14 +8,14 @@ using RimWorld;
 using UnityEngine;
 using HarmonyLib;
 
-namespace TexturePicker;
+namespace ChooseYourTextures;
 
 [StaticConstructorOnStartup]
 public class HarmonyPatches
 {
     static HarmonyPatches()
     {
-        Harmony harmony = new Harmony("nuff.TexturePicker");
+        Harmony harmony = new Harmony("nuff.ChooseYourTextures");
 
         harmony.PatchAll();
 

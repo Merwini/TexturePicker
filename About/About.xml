@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-	<name>Texture Picker</name>
+	<name>Choose Your Textures</name>
 	<author>Nuff</author>
-	<packageId>nuff.texturepicker</packageId>
+	<packageId>nuff.ChooseYourTextures</packageId>
 	<supportedVersions>
 		<li>1.6</li>
 	</supportedVersions>
