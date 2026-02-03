@@ -18,6 +18,8 @@ public class HarmonyPatches
         Harmony harmony = new Harmony("nuff.TexturePicker");
 
         harmony.PatchAll();
+
+        TP_Settings.InitRelevantThingDefs();
     }
 
     [HarmonyPatch(typeof(ContentFinder<Texture2D>), nameof(ContentFinder<Texture2D>.Get))]

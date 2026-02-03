@@ -29,6 +29,14 @@ public class Window_SelectTexture : Window
 
     public override Vector2 InitialSize => new Vector2(1000, 750);
 
+    public Window_SelectTexture()
+    {
+        doCloseX = true;
+        closeOnAccept = false;
+        closeOnCancel = true;
+        absorbInputAroundWindow = true;
+    }
+
     public override void PreOpen()
     {
         base.PreOpen();
@@ -83,7 +91,30 @@ public class Window_SelectTexture : Window
         searchText = Widgets.TextField(searchRect, searchText ?? "");
         y += SearchHeight + 10f;
 
-        Rect outRect = new Rect(inRect.x, y, inRect.width, inRect.height - (y - inRect.y));
+        // Reserve space for the close button at the bottom
+        const float bottomButtonHeight = 35f;
+        const float bottomButtonWidth = 140f;
+        const float bottomPadding = 8f;
+
+        Rect listRect = new Rect(inRect.x, y, inRect.width, inRect.height - (y - inRect.y) - (bottomButtonHeight + bottomPadding));
+        DrawScrollList(listRect);
+
+        // Close button (bottom-right)
+        Rect closeRect = new Rect(
+            inRect.xMax - bottomButtonWidth,
+            inRect.yMax - bottomButtonHeight,
+            bottomButtonWidth,
+            bottomButtonHeight
+        );
+
+        if (Widgets.ButtonText(closeRect, "Close"))
+        {
+            Close(doCloseSound: true);
+        }
+    }
+
+    private void DrawScrollList(Rect outRect)
+    {
         List<KeyValuePair<ThingDef, string>> entries = GetFilteredEntries(searchText);
 
         float viewHeight = 0f;
@@ -216,7 +247,7 @@ public class Window_SelectTexture : Window
         }
         catch (Exception e)
         {
-            Log.ErrorOnce($"Failed to retrieve texture from {path}");
+            Log.ErrorOnce($"Failed to retrieve texture from {path}", path.GetHashCode());
         }
 
         if (tex != null)
