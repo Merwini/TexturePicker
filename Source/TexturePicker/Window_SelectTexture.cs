@@ -1,6 +1,7 @@
 ﻿using RimWorld;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,13 @@ namespace ChooseYourTextures;
 
 public class Window_SelectTexture : Window
 {
+    private static readonly string[] directionSuffix =
+    {
+        "_north",
+        "_south",
+        "_east",
+        "_west"
+    };
 
     Dictionary<ThingDef, string> thingDefToPathDict = new Dictionary<ThingDef, string>();
 
@@ -213,11 +221,11 @@ public class Window_SelectTexture : Window
                 tileHeight
             );
 
-            DrawTextureTile(tileRect, path, mod, chosenMod);
+            DrawTextureTile(tileRect, path, def, mod, chosenMod);
         }
     }
 
-    private void DrawTextureTile(Rect tileRect, string path, ModContentPack mod, ModContentPack chosenMod)
+    private void DrawTextureTile(Rect tileRect, string path, ThingDef def, ModContentPack mod, ModContentPack chosenMod)
     {
         Widgets.DrawMenuSection(tileRect);
 
@@ -264,7 +272,7 @@ public class Window_SelectTexture : Window
 
         if (Widgets.ButtonInvisible(texRect))
         {
-            TP_Settings.chosenPathToModDict[path] = mod;
+            SetAllGraphicPathsForItem(path, def, mod);
             SoundDefOf.Tick_High.PlayOneShotOnCamera();
         }
 
@@ -274,6 +282,78 @@ public class Window_SelectTexture : Window
         Text.Anchor = TextAnchor.UpperCenter;
         Widgets.Label(modLabelRect, modLabel);
         Text.Anchor = TextAnchor.UpperLeft;
+    }
+
+    private void SetAllGraphicPathsForItem(string path, ThingDef def, ModContentPack mod)
+    {
+        TP_Settings.chosenPathToModDict[path] = mod;
+        if (def.apparel is ApparelProperties apProps)
+        {
+            string tryPath = apProps.wornGraphicPath;
+            if (tryPath != null)
+            {
+                TrySetDirectionalAndBodyGraphicPaths(tryPath, mod);
+                return;
+            }
+
+            List<string> tryPaths = apProps.wornGraphicPaths;
+            if (!tryPaths.NullOrEmpty())
+            {
+                for (int i = 0; i < tryPaths.Count; i++)
+                {
+                    TrySetDirectionalAndBodyGraphicPaths(tryPaths[i], mod);
+                }
+            }
+        }
+    }
+
+    void TrySetDirectionalAndBodyGraphicPaths(string basePath, ModContentPack mod)
+    {
+        foreach (string directionPath in DirectionPaths(basePath))
+        {
+            if (TextureExistsAtPath(directionPath, mod))
+            {
+                TP_Settings.chosenPathToModDict[directionPath] = mod;
+            }
+        }
+
+        foreach (string bodyDirectionPath in BodyTypeDirectionPaths(basePath))
+        {
+            if (TextureExistsAtPath(bodyDirectionPath, mod))
+            {
+                TP_Settings.chosenPathToModDict[bodyDirectionPath] = mod;
+            }
+        }
+    }
+
+    private static IEnumerable<string> DirectionPaths(string basePath)
+    {
+        for (int i = 0; i < directionSuffix.Length; i++)
+        {
+            yield return basePath + directionSuffix[i];
+        }
+    }
+
+    // Better compatibility with modded bodyTypes for all those Asian gooner mods
+    private static IEnumerable<string> BodyTypeDirectionPaths(string basePath)
+    {
+        var bodyTypes = DefDatabase<BodyTypeDef>.AllDefsListForReading;
+        for (int i = 0; i < bodyTypes.Count; i++)
+        {
+            string bodyType = bodyTypes[i].defName;
+            for (int j = 0; j < directionSuffix.Length; j++)
+            {
+                yield return $"{basePath}_{bodyType}{directionSuffix[j]}";
+            }
+        }
+    }
+
+    private static bool TextureExistsAtPath(string texPath, ModContentPack mod)
+    {
+        if (mod == null || texPath.NullOrEmpty()) 
+            return false;
+
+        return mod.GetContentHolder<Texture2D>().Get(texPath) != null;
     }
 
     private static string GetModDisplayName(ModContentPack mod)
