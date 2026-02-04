@@ -31,6 +31,10 @@ public class TP_Mod : Mod
         {
             Find.WindowStack.Add(new Window_SelectTexture());
         }
+        if (listing.ButtonText("Open Pawn Texture Override Manager"))
+        {
+            Find.WindowStack.Add(new Window_SelectTexture());
+        }
 
         listing.End();
     }
