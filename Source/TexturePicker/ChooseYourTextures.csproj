@@ -55,6 +55,7 @@
     <Compile Include="Window_SelectPawnTextures.cs" />
     <Compile Include="Window_SelectTexture.cs" />
     <Compile Include="Window_SelectTextureBase.cs" />
+    <Compile Include="Window_Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Krafs.Publicizer">

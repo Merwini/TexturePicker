@@ -27,13 +27,16 @@ public class TP_Mod : Mod
 
         listing.Label("Manage texture overrides:");
 
-        if (listing.ButtonText("Open Texture Override Manager"))
+        if (listing.ButtonText("Open Thing Texture Override Manager"))
         {
-            Find.WindowStack.Add(new Window_SelectTexture());
+            Find.WindowStack.Add(new Window_SelectThingTextures());
         }
-        if (listing.ButtonText("Open Pawn Texture Override Manager"))
+
+        listing.Gap();
+
+        if (listing.ButtonText("Open Pawn / Animal Texture Override Manager"))
         {
-            Find.WindowStack.Add(new Window_SelectTexture());
+            Find.WindowStack.Add(new Window_SelectPawnTextures());
         }
 
         listing.End();

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Verse;
 using RimWorld;
 using UnityEngine;
+using System.Reflection;
+using HarmonyLib;
 
 namespace ChooseYourTextures;
 
@@ -13,10 +15,14 @@ namespace ChooseYourTextures;
 public static class Caching
 {
     internal static Dictionary<string, List<ModContentPack>> pathToModsDict = new Dictionary<string, List<ModContentPack>>();
+    internal static HashSet<string> overloadedPaths = new HashSet<string>();
+    internal static List<FieldInfo> pawnKindLifeStageFields = new List<FieldInfo>();
 
     static Caching()
     {
         PopulatePathToModsDict();
+        PopulateOverLoadedPaths();
+        PopulatePawnKindLifeStageFields();
     }
 
     static void PopulatePathToModsDict()
@@ -42,21 +48,57 @@ public static class Caching
             }
         }
 
-        ModContentPack core = runningModsListForReading.First(mcp => mcp.Name == "Core");
+        //ModContentPack core = runningModsListForReading.First(mcp => mcp.Name == "Core");
 
-        // Try to also add vanilla textures matching the mod textures
-        foreach (var kvp in pathToModsDict)
+        //// Try to also add vanilla textures matching the mod textures
+        //foreach (var kvp in pathToModsDict)
+        //{
+        //    string key = kvp.Key;
+        //    Texture2D tex = (Texture2D)Resources.Load<Texture2D>(GenFilePaths.ContentPath<Texture2D>() + key);
+        //    if (tex != null)
+        //    {
+        //        pathToModsDict.TryGetValue(key, out var list);
+        //        if (!list.NullOrEmpty())
+        //        {
+        //            list.Add(core);
+        //        }
+        //    }
+        //}
+    }
+
+    static void PopulateOverLoadedPaths()
+    {
+        overloadedPaths = new HashSet<string>();
+        foreach (var kvp in Caching.pathToModsDict)
         {
             string key = kvp.Key;
-            Texture2D tex = (Texture2D)(object)Resources.Load<Texture2D>(GenFilePaths.ContentPath<Texture2D>() + key);
-            if (tex != null)
+            Caching.pathToModsDict.TryGetValue(key, out var list);
+            if (list.Count >= 2)
             {
-                pathToModsDict.TryGetValue(key, out var list);
-                if (!list.NullOrEmpty())
-                {
-                    list.Add(core);
-                }
+                overloadedPaths.Add(key);
             }
         }
+    }
+
+    static void PopulatePawnKindLifeStageFields()
+    {
+        pawnKindLifeStageFields.Add(AccessTools.Field("PawnKindLifeStage:bodyGraphicData"));
+        pawnKindLifeStageFields.Add(AccessTools.Field("PawnKindLifeStage:femaleGraphicData"));
+        pawnKindLifeStageFields.Add(AccessTools.Field("PawnKindLifeStage:dessicatedBodyGraphicData"));
+        pawnKindLifeStageFields.Add(AccessTools.Field("PawnKindLifeStage:femaleDessicatedBodyGraphicData"));
+        pawnKindLifeStageFields.Add(AccessTools.Field("PawnKindLifeStage:corpseGraphicData"));
+        pawnKindLifeStageFields.Add(AccessTools.Field("PawnKindLifeStage:swimmingGraphicData"));
+        pawnKindLifeStageFields.Add(AccessTools.Field("PawnKindLifeStage:femaleSwimmingGraphicData"));
+        pawnKindLifeStageFields.Add(AccessTools.Field("PawnKindLifeStage:femaleCorpseGraphicData"));
+        pawnKindLifeStageFields.Add(AccessTools.Field("PawnKindLifeStage:silhouetteGraphicData"));
+        pawnKindLifeStageFields.Add(AccessTools.Field("PawnKindLifeStage:rottingGraphicData"));
+        pawnKindLifeStageFields.Add(AccessTools.Field("PawnKindLifeStage:femaleRottingGraphicData"));
+        pawnKindLifeStageFields.Add(AccessTools.Field("PawnKindLifeStage:stationaryGraphicData"));
+        pawnKindLifeStageFields.Add(AccessTools.Field("PawnKindLifeStage:femaleStationaryGraphicData"));
+    }
+
+    internal static bool IsOverloaded(string path)
+    {
+        return overloadedPaths.Contains(path);
     }
 }
