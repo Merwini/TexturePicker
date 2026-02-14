@@ -11,7 +11,7 @@ using RimWorld.BaseGen;
 using System.Reflection;
 using HarmonyLib;
 
-namespace ChooseYourTextures;
+namespace nuff.ChooseYourTextures;
 
 public class Window_SelectPawnTextures : Window_SelectTextureBase
 {

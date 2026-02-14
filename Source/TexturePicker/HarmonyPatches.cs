@@ -8,7 +8,7 @@ using RimWorld;
 using UnityEngine;
 using HarmonyLib;
 
-namespace ChooseYourTextures;
+namespace nuff.ChooseYourTextures;
 
 [StaticConstructorOnStartup]
 public class HarmonyPatches

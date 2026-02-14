@@ -9,7 +9,7 @@ using UnityEngine;
 using System.Reflection;
 using HarmonyLib;
 
-namespace ChooseYourTextures;
+namespace nuff.ChooseYourTextures;
 
 [StaticConstructorOnStartup]
 public static class Caching

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace ChooseYourTextures;
+namespace nuff.ChooseYourTextures;
 
 public class TP_Mod : Mod
 {

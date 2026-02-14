@@ -9,7 +9,7 @@ using UnityEngine;
 using Verse;
 using Verse.Sound;
 
-namespace ChooseYourTextures;
+namespace nuff.ChooseYourTextures;
 
 public class Window_SelectTexture : Window
 {
