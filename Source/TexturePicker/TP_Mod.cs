@@ -1,11 +1,12 @@
-﻿using System;
+﻿using RimWorld;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Verse;
-using RimWorld;
 using UnityEngine;
+using Verse;
 
 namespace ChooseYourTextures;
 
@@ -25,18 +26,25 @@ public class TP_Mod : Mod
         Listing_Standard listing = new Listing_Standard();
         listing.Begin(inRect);
 
-        listing.Label("Manage texture overrides:");
-
-        if (listing.ButtonText("Open Thing Texture Override Manager"))
+        if (Current.Game != null)
         {
-            Find.WindowStack.Add(new Window_SelectThingTextures());
+            listing.Label("SETTINGS MUST BE CHANGED FROM THE MAIN MENU.");
         }
-
-        listing.Gap();
-
-        if (listing.ButtonText("Open Pawn / Animal Texture Override Manager"))
+        else
         {
-            Find.WindowStack.Add(new Window_SelectPawnTextures());
+            listing.Label("Manage texture overrides:");
+
+            if (listing.ButtonText("Open Thing Texture Override Manager"))
+            {
+                Find.WindowStack.Add(new Window_SelectThingTextures());
+            }
+
+            listing.Gap();
+
+            if (listing.ButtonText("Open Pawn / Animal Texture Override Manager"))
+            {
+                Find.WindowStack.Add(new Window_SelectPawnTextures());
+            }
         }
 
         listing.End();
