@@ -36,6 +36,8 @@ public class Window_SelectThingTextures : Window_SelectTextureBase
             ThingDef def = defs[i];
             thingDefToPathsDict[def] = DefaultGraphicForDef(def);
         }
+
+        PopulateOverloadedItemsDict();
     }
 
     public override void PreClose()

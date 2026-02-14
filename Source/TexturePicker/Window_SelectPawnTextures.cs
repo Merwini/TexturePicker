@@ -40,6 +40,8 @@ public class Window_SelectPawnTextures : Window_SelectTextureBase
             PawnKindDef def = defs[i];
             pawnKindDefToPathsDict[def] = DefaultGraphicForDef(def);
         }
+
+        PopulateOverloadedItemsDict();
     }
 
     public override void PreClose()
